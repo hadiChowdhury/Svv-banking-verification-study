@@ -1,0 +1,33 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.20, pytest-9.1.1, pluggy-1.6.0
+django: version: 3.2.9, settings: banking_system.settings (from ini)
+rootdir: /Users/shihabchowdhury/University/Courses/SVV/Project/Svv-banking-verification-study
+configfile: pytest.ini
+plugins: cov-7.1.0, celery-4.4.7, django-4.12.0, hypothesis-6.156.6
+collected 29 items
+
+tests/manual/test_account_model_behavior.py ......                       [ 20%]
+tests/manual/test_deposit_validation.py ...                              [ 31%]
+tests/manual/test_interest_calculation.py ......                         [ 51%]
+tests/manual/test_transaction_processing.py .....                        [ 68%]
+tests/manual/test_withdrawal_validation.py .........                     [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.10/site-packages/django/apps/registry.py:91
+  /Users/shihabchowdhury/University/Courses/SVV/Project/Svv-banking-verification-study/.venv/lib/python3.10/site-packages/django/apps/registry.py:91: RemovedInDjango41Warning: 'django_celery_beat' defines default_app_config = 'django_celery_beat.apps.BeatConfig'. Django now detects this configuration automatically. You can remove default_app_config.
+    app_config = AppConfig.create(entry)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.10.20-final-0 _______________
+
+Name                                                   Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------------------------------
+subject_system/banking_system/accounts/models.py          55      2      2      0    96%   24, 124
+subject_system/banking_system/transactions/forms.py       53     12     12      0    75%   80-93
+subject_system/banking_system/transactions/models.py      13      0      0      0   100%
+subject_system/banking_system/transactions/views.py       71     12      6      0    79%   24-28, 31-40, 43-49
+--------------------------------------------------------------------------------------------------
+TOTAL                                                    192     26     20      0    84%
+Coverage JSON written to file results/coverage/manual_coverage.json
+======================== 29 passed, 1 warning in 0.89s =========================
