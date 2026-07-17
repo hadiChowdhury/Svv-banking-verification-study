@@ -1,0 +1,29 @@
+Mutation Testing Comparison
+
+Identical generated mutant population: 96
+Common out-of-scope date-range mutants excluded: 26
+Controlled relevant mutant population: 70
+
+Manual PyTest Suite
+- Killed: 53
+- Survived: 17
+- Relevant no-test: 0
+- Controlled mutation score: 53 / 70 = 75.71%
+
+Hypothesis Property-Based Suite
+- Killed: 42
+- Survived: 15
+- Relevant no-test: 13
+- Controlled mutation score: 42 / 70 = 60.00%
+
+Difference:
+75.71% - 60.00% = 15.71 percentage points in favour of the manual suite.
+
+Reached-mutant scores:
+- Manual: 53 / (53 + 17) = 75.71%
+- Property-based: 42 / (42 + 15) = 73.68%
+
+Interpretation:
+The two suites showed similar fault-detection effectiveness within code
+they exercised. The manual suite achieved the higher overall controlled
+score because it exercised a broader range of account-model behaviours.

@@ -1,0 +1,96 @@
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_1: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_2: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_3: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_4: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_5: survived
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_6: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_7: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_8: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_9: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_10: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_11: survived
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_12: killed
+    transactions.forms.xǁTransactionFormǁ__init____mutmut_13: killed
+    transactions.forms.xǁTransactionFormǁsave__mutmut_1: survived
+    transactions.forms.xǁTransactionFormǁsave__mutmut_2: killed
+    transactions.forms.xǁTransactionFormǁsave__mutmut_3: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_1: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_2: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_3: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_4: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_5: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_6: killed
+    transactions.forms.xǁDepositFormǁclean_amount__mutmut_7: survived
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_1: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_2: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_3: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_4: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_5: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_6: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_7: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_8: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_9: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_10: survived
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_11: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_12: survived
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_13: killed
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_14: survived
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_15: survived
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_16: survived
+    transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_17: survived
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_1: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_2: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_3: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_4: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_5: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_6: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_7: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_8: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_9: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_10: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_11: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_12: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_13: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_14: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_15: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_16: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_17: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_18: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_19: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_20: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_21: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_22: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_23: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_24: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_25: no tests
+    transactions.forms.xǁTransactionDateRangeFormǁclean_daterange__mutmut_26: no tests
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_1: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_2: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_3: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_4: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_5: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_6: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_7: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_8: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_9: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_10: survived
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_11: survived
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_12: survived
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_13: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_14: survived
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_15: killed
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_16: survived
+    accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_17: killed
+    accounts.models.xǁUserBankAccountǁ__str____mutmut_1: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_1: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_2: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_3: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_4: survived
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_5: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_6: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_7: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_8: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_9: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_10: killed
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_11: survived
+    accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_12: killed
