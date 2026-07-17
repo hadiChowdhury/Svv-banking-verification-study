@@ -1,0 +1,15 @@
+Manual PyTest Mutation Run
+
+Total mutants: 96
+Killed: 53
+Survived: 17
+No tests: 26
+Timeout: 0
+Suspicious: 0
+Skipped: 0
+
+Raw mutation score:
+53 / 96 = 55.21%
+
+Tested-mutant mutation score:
+53 / (53 + 17) = 75.71%

@@ -1,0 +1,29 @@
+Hypothesis Property-Based Mutation Run
+
+Total mutants: 96
+Killed: 42
+Survived: 15
+No tests: 39
+Timeout: 0
+Suspicious: 0
+Skipped: 0
+
+Out-of-scope mutants:
+26 mutants in TransactionDateRangeForm.clean_daterange
+
+Relevant in-scope mutants:
+96 - 26 = 70
+
+Relevant no-test mutants:
+13
+- UserBankAccount.__str__: 1
+- UserBankAccount.get_interest_calculation_months: 12
+
+Raw mutation score:
+42 / 96 = 43.75%
+
+Reached-mutant mutation score:
+42 / (42 + 15) = 73.68%
+
+Controlled in-scope mutation score:
+42 / 70 = 60.00%
