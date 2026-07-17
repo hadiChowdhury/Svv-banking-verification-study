@@ -1,0 +1,12 @@
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_10: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -10,7 +10,7 @@
+ 
+     if amount < min_withdraw_amount:
+         raise forms.ValidationError(
+-            f'You can withdraw at least {min_withdraw_amount} $'
++            None
+         )
+ 
+     if amount > max_withdraw_amount:

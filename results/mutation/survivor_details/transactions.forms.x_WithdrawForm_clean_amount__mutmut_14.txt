@@ -1,0 +1,13 @@
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_14: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -20,8 +20,7 @@
+ 
+     if amount > balance:
+         raise forms.ValidationError(
+-            f'You have {balance} $ in your account. '
+-            'You can not withdraw more than your account balance'
++            None
+         )
+ 
+     return amount

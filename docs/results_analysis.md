@@ -102,14 +102,7 @@ Several survivors were shared by both suites. Shared survivors indicate either:
 
 The manual suite additionally killed mutants in account helper behaviour that the property-based suite did not reach. This accounts for much of the final mutation-score difference.
 
-A later survivor-classification activity should inspect each surviving mutant using `mutmut show` and classify it as:
-
-- boundary-related fault;
-- arithmetic or logic fault;
-- exception or validation fault;
-- state-management fault;
-- equivalent mutant; or
-- outside the observable specification.
+Manual inspection of the 17 surviving mutants classified seven as genuine test weaknesses, two as equivalent or likely equivalent, seven as changes to underspecified diagnostic text, and one as outside the core financial scope. The genuine weaknesses were concentrated in interest arithmetic, currency rounding, interest-period scheduling, and positional form initialization. Full details are recorded in `docs/surviving_mutant_analysis.md`.
 
 ## 6. Coverage and Mutation Adequacy
 

@@ -1,0 +1,12 @@
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_12: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -15,7 +15,7 @@
+ 
+     if amount > max_withdraw_amount:
+         raise forms.ValidationError(
+-            f'You can withdraw at most {max_withdraw_amount} $'
++            None
+         )
+ 
+     if amount > balance:

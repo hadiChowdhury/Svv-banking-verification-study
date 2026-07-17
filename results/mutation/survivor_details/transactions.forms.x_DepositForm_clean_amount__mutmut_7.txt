@@ -1,0 +1,12 @@
+# transactions.forms.xǁDepositFormǁclean_amount__mutmut_7: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -4,7 +4,7 @@
+ 
+     if amount < min_deposit_amount:
+         raise forms.ValidationError(
+-            f'You need to deposit at least {min_deposit_amount} $'
++            None
+         )
+ 
+     return amount
