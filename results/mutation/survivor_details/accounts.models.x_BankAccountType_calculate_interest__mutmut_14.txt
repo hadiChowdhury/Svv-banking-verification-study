@@ -1,0 +1,9 @@
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_14: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -11,4 +11,4 @@
+     # Basic Future Value formula to calculate interest
+     interest = (p * (1 + ((r/100) / n))) - p
+ 
+-    return round(interest, 2)
++    return round(interest, None)

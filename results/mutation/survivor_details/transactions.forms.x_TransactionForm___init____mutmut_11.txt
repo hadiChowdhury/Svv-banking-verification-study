@@ -1,0 +1,9 @@
+# transactions.forms.xǁTransactionFormǁ__init____mutmut_11: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -3,4 +3,4 @@
+     super().__init__(*args, **kwargs)
+ 
+     self.fields['transaction_type'].disabled = True
+-    self.fields['transaction_type'].widget = forms.HiddenInput()
++    self.fields['transaction_type'].widget = None

@@ -1,0 +1,254 @@
+
+============================================================
+accounts.models.x_BankAccountType_calculate_interest__mutmut_10.txt
+============================================================
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_10: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -9,6 +9,6 @@
+     n = Decimal(self.interest_calculation_per_year)
+ 
+     # Basic Future Value formula to calculate interest
+-    interest = (p * (1 + ((r/100) / n))) - p
++    interest = (p * (1 + ((r/100) * n))) - p
+ 
+     return round(interest, 2)
+
+============================================================
+accounts.models.x_BankAccountType_calculate_interest__mutmut_11.txt
+============================================================
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_11: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -9,6 +9,6 @@
+     n = Decimal(self.interest_calculation_per_year)
+ 
+     # Basic Future Value formula to calculate interest
+-    interest = (p * (1 + ((r/100) / n))) - p
++    interest = (p * (1 + ((r * 100) / n))) - p
+ 
+     return round(interest, 2)
+
+============================================================
+accounts.models.x_BankAccountType_calculate_interest__mutmut_12.txt
+============================================================
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_12: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -9,6 +9,6 @@
+     n = Decimal(self.interest_calculation_per_year)
+ 
+     # Basic Future Value formula to calculate interest
+-    interest = (p * (1 + ((r/100) / n))) - p
++    interest = (p * (1 + ((r/101) / n))) - p
+ 
+     return round(interest, 2)
+
+============================================================
+accounts.models.x_BankAccountType_calculate_interest__mutmut_14.txt
+============================================================
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_14: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -11,4 +11,4 @@
+     # Basic Future Value formula to calculate interest
+     interest = (p * (1 + ((r/100) / n))) - p
+ 
+-    return round(interest, 2)
++    return round(interest, None)
+
+============================================================
+accounts.models.x_BankAccountType_calculate_interest__mutmut_16.txt
+============================================================
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_16: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -11,4 +11,4 @@
+     # Basic Future Value formula to calculate interest
+     interest = (p * (1 + ((r/100) / n))) - p
+ 
+-    return round(interest, 2)
++    return round(interest, )
+
+============================================================
+accounts.models.x_UserBankAccount_get_interest_calculation_months__mutmut_11.txt
+============================================================
+# accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_11: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -8,4 +8,4 @@
+         12 / self.account_type.interest_calculation_per_year
+     )
+     start = self.interest_start_date.month
+-    return [i for i in range(start, 13, interval)]
++    return [i for i in range(start, 13, )]
+
+============================================================
+accounts.models.x_UserBankAccount_get_interest_calculation_months__mutmut_4.txt
+============================================================
+# accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_4: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -5,7 +5,7 @@
+         returns [2, 4, 6, 8, 10, 12] for every 2 months interval
+         """
+     interval = int(
+-        12 / self.account_type.interest_calculation_per_year
++        13 / self.account_type.interest_calculation_per_year
+     )
+     start = self.interest_start_date.month
+     return [i for i in range(start, 13, interval)]
+
+============================================================
+transactions.forms.x_DepositForm_clean_amount__mutmut_7.txt
+============================================================
+# transactions.forms.xǁDepositFormǁclean_amount__mutmut_7: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -4,7 +4,7 @@
+ 
+     if amount < min_deposit_amount:
+         raise forms.ValidationError(
+-            f'You need to deposit at least {min_deposit_amount} $'
++            None
+         )
+ 
+     return amount
+
+============================================================
+transactions.forms.x_TransactionForm___init____mutmut_11.txt
+============================================================
+# transactions.forms.xǁTransactionFormǁ__init____mutmut_11: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -3,4 +3,4 @@
+     super().__init__(*args, **kwargs)
+ 
+     self.fields['transaction_type'].disabled = True
+-    self.fields['transaction_type'].widget = forms.HiddenInput()
++    self.fields['transaction_type'].widget = None
+
+============================================================
+transactions.forms.x_TransactionForm___init____mutmut_5.txt
+============================================================
+# transactions.forms.xǁTransactionFormǁ__init____mutmut_5: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -1,6 +1,6 @@
+ def __init__(self, *args, **kwargs):
+     self.account = kwargs.pop('account')
+-    super().__init__(*args, **kwargs)
++    super().__init__(**kwargs)
+ 
+     self.fields['transaction_type'].disabled = True
+     self.fields['transaction_type'].widget = forms.HiddenInput()
+
+============================================================
+transactions.forms.x_TransactionForm_save__mutmut_1.txt
+============================================================
+# transactions.forms.xǁTransactionFormǁsave__mutmut_1: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -1,4 +1,4 @@
+-def save(self, commit=True):
++def save(self, commit=False):
+     self.instance.account = self.account
+     self.instance.balance_after_transaction = self.account.balance
+     return super().save()
+
+============================================================
+transactions.forms.x_WithdrawForm_clean_amount__mutmut_10.txt
+============================================================
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_10: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -10,7 +10,7 @@
+ 
+     if amount < min_withdraw_amount:
+         raise forms.ValidationError(
+-            f'You can withdraw at least {min_withdraw_amount} $'
++            None
+         )
+ 
+     if amount > max_withdraw_amount:
+
+============================================================
+transactions.forms.x_WithdrawForm_clean_amount__mutmut_12.txt
+============================================================
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_12: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -15,7 +15,7 @@
+ 
+     if amount > max_withdraw_amount:
+         raise forms.ValidationError(
+-            f'You can withdraw at most {max_withdraw_amount} $'
++            None
+         )
+ 
+     if amount > balance:
+
+============================================================
+transactions.forms.x_WithdrawForm_clean_amount__mutmut_14.txt
+============================================================
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_14: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -20,8 +20,7 @@
+ 
+     if amount > balance:
+         raise forms.ValidationError(
+-            f'You have {balance} $ in your account. '
+-            'You can not withdraw more than your account balance'
++            None
+         )
+ 
+     return amount
+
+============================================================
+transactions.forms.x_WithdrawForm_clean_amount__mutmut_15.txt
+============================================================
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_15: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -21,7 +21,7 @@
+     if amount > balance:
+         raise forms.ValidationError(
+             f'You have {balance} $ in your account. '
+-            'You can not withdraw more than your account balance'
++            'XXYou can not withdraw more than your account balanceXX'
+         )
+ 
+     return amount
+
+============================================================
+transactions.forms.x_WithdrawForm_clean_amount__mutmut_16.txt
+============================================================
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_16: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -21,7 +21,7 @@
+     if amount > balance:
+         raise forms.ValidationError(
+             f'You have {balance} $ in your account. '
+-            'You can not withdraw more than your account balance'
++            'you can not withdraw more than your account balance'
+         )
+ 
+     return amount
+
+============================================================
+transactions.forms.x_WithdrawForm_clean_amount__mutmut_17.txt
+============================================================
+# transactions.forms.xǁWithdrawFormǁclean_amount__mutmut_17: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -21,7 +21,7 @@
+     if amount > balance:
+         raise forms.ValidationError(
+             f'You have {balance} $ in your account. '
+-            'You can not withdraw more than your account balance'
++            'YOU CAN NOT WITHDRAW MORE THAN YOUR ACCOUNT BALANCE'
+         )
+ 
+     return amount

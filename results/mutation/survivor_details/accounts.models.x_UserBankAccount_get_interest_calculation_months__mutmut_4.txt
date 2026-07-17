@@ -1,0 +1,12 @@
+# accounts.models.xǁUserBankAccountǁget_interest_calculation_months__mutmut_4: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -5,7 +5,7 @@
+         returns [2, 4, 6, 8, 10, 12] for every 2 months interval
+         """
+     interval = int(
+-        12 / self.account_type.interest_calculation_per_year
++        13 / self.account_type.interest_calculation_per_year
+     )
+     start = self.interest_start_date.month
+     return [i for i in range(start, 13, interval)]

@@ -1,0 +1,11 @@
+# accounts.models.xǁBankAccountTypeǁcalculate_interest__mutmut_11: survived
+--- src/accounts/models.py
++++ src/accounts/models.py
+@@ -9,6 +9,6 @@
+     n = Decimal(self.interest_calculation_per_year)
+ 
+     # Basic Future Value formula to calculate interest
+-    interest = (p * (1 + ((r/100) / n))) - p
++    interest = (p * (1 + ((r * 100) / n))) - p
+ 
+     return round(interest, 2)

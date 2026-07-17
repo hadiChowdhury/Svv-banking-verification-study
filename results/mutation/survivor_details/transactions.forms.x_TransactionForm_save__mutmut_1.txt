@@ -1,0 +1,9 @@
+# transactions.forms.xǁTransactionFormǁsave__mutmut_1: survived
+--- src/transactions/forms.py
++++ src/transactions/forms.py
+@@ -1,4 +1,4 @@
+-def save(self, commit=True):
++def save(self, commit=False):
+     self.instance.account = self.account
+     self.instance.balance_after_transaction = self.account.balance
+     return super().save()
