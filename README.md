@@ -1,113 +1,380 @@
-# Manual Testing vs. Automated Verification: A Comparative Adequacy Study Using Mutation Score as an Objective Evaluation Metric
+# Manual Testing vs. Automated Verification
 
-**Course:** ENGI 9839 — Software Verification and Validation  
-**Institution:** Memorial University of Newfoundland  
-**Author:** Md Abdul Hadi Chowdhury  
-**Supervisor:** Raja Abbas  
+## A Comparative Adequacy Study Using Mutation Score
+
+**Course:** ENGI-9839 — Software Verification and Validation
+**Institution:** Memorial University of Newfoundland
+**Student:** MD Abdul Hadi Chowdhury
+**Instructor:** Raja Abbas
 
 ---
 
 ## Overview
 
-This project compares two fundamentally different testing paradigms — **manual unit testing** (PyTest) and **automated property-based verification** (Hypothesis) — applied to the same Python subject system, and evaluates both using **mutation score** as a shared, objective adequacy criterion.
+This project compares two different ways of designing automated software tests for the financial transaction subsystem of an open-source Django banking application:
 
-The central premise is that code coverage, the most widely used measure of test suite completeness, does not reliably reflect a suite's ability to detect real faults. Mutation testing provides a stronger signal: it seeds small syntactic faults into the source code and measures what fraction of them the test suite detects. By running the same mutation pipeline against two independently constructed test suites — one manual, one automated — this project produces an empirical, head-to-head comparison of fault-detection capability across the two paradigms.
+1. A manually designed test suite based on **Equivalence Partitioning (EP)** and **Boundary Value Analysis (BVA)**.
+2. A property-based test suite implemented using **Hypothesis**.
+
+The term **manual suite** refers to manual test-case design, not manual test execution. Both suites are executed automatically using `pytest`.
+
+The project evaluates the two suites using:
+
+- statement and branch coverage with `pytest-cov`;
+- mutation testing with `mutmut`;
+- manual analysis of surviving mutants; and
+- comparison of behavioural reach and fault-detection strength.
+
+The main purpose is to investigate whether differences in mutation score are caused by stronger test assertions, broader code reach, or an incomplete property catalogue.
 
 ---
 
-## Research Questions
+## Research Question
 
-| # | Research Question |
-|---|---|
-| **RQ1** | Does automated property-based testing (Hypothesis) achieve a higher mutation score than manual unit testing (PyTest) on the same subject system? |
-| **RQ2** | What categories of faults does each approach detect that the other systematically fails to expose? |
-| **RQ3** | Does code coverage accurately predict mutation score under either testing paradigm, or does it overestimate test suite adequacy in both cases? |
+The primary research question is:
+
+> For the selected financial transaction subsystem, how does the mutation adequacy of a manually designed equivalence-partitioning and boundary-value test suite compare with that of a Hypothesis property-based test suite?
+
+The project also examines:
+
+1. Which suite achieves higher structural coverage?
+2. Which suite reaches a broader range of financial behaviours?
+3. Which categories of mutants survive?
+4. What relationship exists between code coverage and mutation adequacy?
+
+---
+
+## Main Finding
+
+The manually designed EP/BVA suite achieved broader behavioural reach and a higher controlled mutation score.
+
+However, when only mutants reached by each suite were considered, the mutation scores were very close:
+
+| Metric                      | Manual EP/BVA | Property-Based |
+| --------------------------- | ------------: | -------------: |
+| Test functions              |            29 |             16 |
+| Overall structural coverage |           84% |            77% |
+| Controlled mutation score   |        75.71% |         60.00% |
+| Reached-mutant score        |        75.71% |         73.68% |
+
+This suggests that the main difference came from **behavioural reach**, rather than a large difference in fault-detection strength within executed code.
+
+The study therefore supports using EP/BVA and property-based testing as complementary techniques.
 
 ---
 
 ## Subject System
 
-The subject system is a hand-written Python financial transaction module (`src/transaction.py`) comprising the `BankAccount` class with the following operations:
+The subject system is the open-source Django banking application:
 
-| Method | Description |
-|---|---|
-| `deposit(amount)` | Deposits a positive amount; raises `InvalidAmountError` otherwise |
-| `withdraw(amount)` | Withdraws a positive amount within balance; raises `InsufficientFundsError` on overdraft |
-| `transfer(target, amount)` | Atomically moves funds between two accounts |
-| `get_net_balance()` | Recomputes balance from transaction history as a consistency check |
-| `get_total_deposited()` | Aggregates all inflows |
-| `get_total_withdrawn()` | Aggregates all outflows |
-| `get_statement()` | Returns a formatted transaction history string |
+```text
+saadmk11/banking-system
+```
 
-The module was designed with rich, well-defined logical invariants to give both testing approaches meaningful properties to verify:
+Original repository:
 
-- **P1** — Balance is always non-negative
-- **P2** — Deposit strictly increases balance by the exact deposited amount
-- **P3** — Withdrawal strictly decreases balance by the exact withdrawn amount
-- **P4** — `deposit(x)` followed by `withdraw(x)` restores the original balance
-- **P5** — Transfer conserves total money across both accounts
-- **P6** — Net balance computed from transaction history always equals the stored balance
-- **P7** — All invalid inputs are rejected with the correct exception type
+```text
+https://github.com/saadmk11/banking-system
+```
+
+The evaluated upstream revision was pinned to:
+
+```text
+9c3ee3eea75030280405506c62d968d646981c05
+```
+
+The imported subject system is stored under:
+
+```text
+subject_system/banking_system/
+```
+
+Upstream repository details and the pinned commit are documented in:
+
+```text
+subject_system/UPSTREAM.md
+```
 
 ---
 
-## Methodology
+## Selected Verification Scope
 
-### Approach A — Manual Unit Testing (PyTest)
-A hand-crafted test suite developed using conventional unit testing techniques: equivalence partitioning, boundary value analysis, and error guessing. The engineer manually reasons about specific input–output pairs. This approach is bounded by human judgment and susceptible to blind spots at unanticipated boundary conditions.
+The study focuses on the following production modules:
 
-**Test count:** 41 test cases across 7 test classes  
-**File:** `tests/test_manual_pytest.py`
-
-### Approach B — Automated Property-Based Verification (Hypothesis)
-An independent test suite constructed using the Hypothesis library, in which tests are expressed as universally quantified logical properties over automatically generated inputs. Rather than enumerating specific cases, each test asserts an invariant that must hold across the entire valid input domain. Hypothesis generates hundreds of input combinations per property, actively searching for counterexamples.
-
-**Test count:** 21 property tests covering all 7 formal properties  
-**File:** `tests/test_automated_hypothesis.py`
-
-### Evaluation — Mutation Analysis (mutmut)
-Both suites are evaluated using `mutmut`, a Python mutation testing framework. Mutmut introduces small syntactic mutations into the source code (e.g., changing `>` to `>=`, `+` to `-`, `True` to `False`) and runs the test suite against each mutant. A mutant is **killed** if at least one test fails on it; it **survives** if all tests pass. The mutation score is:
-
-```
-Mutation Score = (Killed Mutants) / (Killed + Survived Mutants) × 100%
+```text
+accounts/models.py
+transactions/forms.py
+transactions/models.py
+transactions/views.py
 ```
 
-The same mutation pipeline is run separately against each suite under identical conditions, producing two mutation scores for direct comparison.
+These modules are represented in the repository under the controlled source copy used for testing.
+
+The selected behaviours include:
+
+- deposit validation;
+- minimum deposit boundaries;
+- withdrawal validation;
+- minimum withdrawal boundaries;
+- maximum withdrawal boundaries;
+- rejection of withdrawals above the available balance;
+- account balance increases after accepted deposits;
+- account balance decreases after accepted withdrawals;
+- preservation of state after rejected operations;
+- transaction-record creation;
+- correct transaction-account association;
+- storage of the resulting account balance;
+- interest calculation;
+- monetary rounding;
+- interest-calculation scheduling; and
+- selected account-model helper behaviour.
+
+---
+
+## Excluded Functionality
+
+The following areas were excluded from the experimental scope:
+
+- authentication and authorization;
+- account registration;
+- administrative interfaces;
+- HTML templates and visual presentation;
+- Celery background tasks;
+- Redis integration;
+- email notifications;
+- transaction report rendering;
+- transaction date-range filtering; and
+- deployment infrastructure.
+
+The excluded date-range filtering functionality remained present in the source code. Therefore, `mutmut` still generated mutants for it. Since neither suite tested that feature, those mutants were classified as `no tests` and excluded symmetrically from the controlled comparison.
+
+---
+
+## Requirements and Invariants
+
+The selected open-source project did not contain a complete formal requirements document for the financial subsystem.
+
+The relevant requirements were therefore reconstructed from:
+
+- form validation logic;
+- Django model configuration;
+- view-processing behaviour;
+- database state changes; and
+- observable transaction outcomes.
+
+The project documents:
+
+- **22 behavioural requirements**
+- **13 financial invariants**
+
+These are stored in:
+
+```text
+docs/requirements_specification.md
+docs/invariants.md
+```
+
+Examples include:
+
+```text
+Accepted deposit:
+balance_after = balance_before + deposit_amount
+```
+
+```text
+Accepted withdrawal:
+balance_after = balance_before - withdrawal_amount
+```
+
+```text
+Rejected operation:
+balance_after = balance_before
+```
+
+```text
+Transaction record:
+stored balance = actual resulting account balance
+```
+
+---
+
+## Testing Approaches
+
+### Manual EP/BVA Suite
+
+Location:
+
+```text
+tests/manual/
+```
+
+The manual suite contains:
+
+```text
+29 pytest test functions
+```
+
+The suite was designed using:
+
+- Equivalence Partitioning;
+- Boundary Value Analysis;
+- fixed expected-value assertions;
+- validation checks;
+- state-preservation checks;
+- database persistence checks; and
+- direct requirements-to-test traceability.
+
+Example EP/BVA thinking:
+
+If a minimum transaction value is required, the manual suite selects values:
+
+- below the minimum;
+- exactly at the minimum; and
+- above the minimum.
+
+The term `manual` means the test cases were manually selected and designed. The tests were still executed automatically using `pytest`.
+
+---
+
+### Property-Based Suite
+
+Location:
+
+```text
+tests/property_based/
+```
+
+The property-based suite contains:
+
+```text
+16 Hypothesis property test functions
+```
+
+The suite uses automatically generated values for:
+
+- deposits;
+- withdrawals;
+- account balances;
+- interest rates;
+- calculation frequencies; and
+- transaction relationships.
+
+Examples of tested properties include:
+
+- every accepted deposit increases the balance by the exact deposited amount;
+- every accepted withdrawal decreases the balance by the exact withdrawal amount;
+- rejected operations preserve the original balance;
+- withdrawals above the available balance are rejected;
+- interest is non-negative for valid positive values;
+- increasing the principal does not reduce interest when other values stay fixed; and
+- interest results follow the implemented arithmetic relationship.
+
+One property test function may be executed many times by Hypothesis using different generated inputs. Therefore, 16 property test functions do not mean that only 16 input values were tested.
+
+---
+
+## Tools and Technologies
+
+| Tool          | Purpose                         |
+| ------------- | ------------------------------- |
+| Python        | Programming language            |
+| Django        | Subject-system framework        |
+| pytest        | Test execution                  |
+| Hypothesis    | Property-based input generation |
+| pytest-django | Django integration for pytest   |
+| pytest-cov    | Statement and branch coverage   |
+| mutmut        | Mutation testing                |
+| Git           | Version control                 |
+| GitHub        | Repository hosting              |
+
+---
+
+## Verified Environment
+
+The experiment was completed using:
+
+| Component     | Version |
+| ------------- | ------: |
+| Python        | 3.10.20 |
+| Django        |   3.2.9 |
+| pytest        |   9.1.1 |
+| pytest-django |  4.12.0 |
+| pytest-cov    |   7.1.0 |
+| Hypothesis    | 6.156.6 |
+| mutmut        |   3.6.0 |
+
+The project was executed in a Python virtual environment on macOS.
 
 ---
 
 ## Repository Structure
 
-```
-ENGI9839-mutation-study/
+```text
+Svv-banking-verification-study/
+│
+├── docs/
+│   ├── requirements_specification.md
+│   ├── invariants.md
+│   ├── results_analysis.md
+│   └── surviving_mutant_analysis.md
+│
+├── experiments/
+│
+├── presentation/
+│
+├── report/
+│
+├── results/
+│   ├── coverage/
+│   │   ├── manual_coverage.txt
+│   │   ├── manual_coverage.json
+│   │   ├── property_coverage.txt
+│   │   └── property_coverage.json
+│   │
+│   └── mutation/
+│       ├── manual/
+│       ├── property_based/
+│       ├── survivor_details/
+│       └── comparison_summary.txt
+│
+├── scripts/
+│   ├── prepare_mutation_workspace.sh
+│   └── export_surviving_mutants.sh
 │
 ├── src/
-│   ├── __init__.py
-│   └── transaction.py                    # Subject system under test
+│   ├── accounts/
+│   └── transactions/
+│
+├── subject_system/
+│   ├── UPSTREAM.md
+│   └── banking_system/
 │
 ├── tests/
-│   ├── __init__.py
-│   ├── test_manual_pytest.py             # Approach A: Manual unit tests
-│   └── test_automated_hypothesis.py      # Approach B: Property-based tests
+│   ├── manual/
+│   │   ├── test_account_model_behavior.py
+│   │   ├── test_deposit_validation.py
+│   │   ├── test_interest_calculation.py
+│   │   ├── test_transaction_processing.py
+│   │   └── test_withdrawal_validation.py
+│   │
+│   └── property_based/
+│       ├── test_deposit_properties.py
+│       ├── test_transaction_properties.py
+│       ├── test_withdrawal_properties.py
+│       └── test_interest_properties.py
 │
-├── mutation/
-│   ├── run_mutation.sh                   # One-command mutation runner
-│   └── results/                          # Auto-generated mutation output
-│       ├── mutmut_pytest_summary.txt
-│       ├── mutmut_hypothesis_summary.txt
-│       └── *.xml
-│
-├── analysis/
-│   ├── compare_scores.py                 # Coverage vs mutation score charts
-│   └── figures/                          # Auto-generated plots
-│
-├── report/                               # LaTeX project report
-├── slides/                               # Presentation slides
-│
-├── setup.cfg                             # pytest and mutmut configuration
-├── requirements.txt                      # Python dependencies
-└── README.md
+├── .gitignore
+├── LICENSE
+├── mutmut_pytest.ini
+├── pytest.ini
+├── README.md
+├── requirements-baseline.txt
+├── requirements-dev.txt
+├── requirements.txt
+└── setup.cfg
 ```
+
+Generated folders such as `.venv`, `.pytest_cache`, `.hypothesis`, `mutants`, `__pycache__`, and coverage cache files are not required for reproduction or submission.
 
 ---
 
@@ -116,25 +383,42 @@ ENGI9839-mutation-study/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ENGI9839-mutation-study.git
-cd ENGI9839-mutation-study
+git clone https://github.com/hadiChowdhury/Svv-banking-verification-study.git
+cd Svv-banking-verification-study
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create a virtual environment
+
+Python 3.10 is recommended.
 
 ```bash
-python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# macOS / Linux
-source venv/bin/activate
+python3.10 -m venv .venv
 ```
 
-### 3. Install dependencies
+### 3. Activate the virtual environment
+
+macOS or Linux:
 
 ```bash
+source .venv/bin/activate
+```
+
+Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Windows Command Prompt:
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+### 4. Install dependencies
+
+```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -142,118 +426,539 @@ pip install -r requirements.txt
 
 ## Running the Tests
 
-### Approach A — Manual Unit Tests
+### Manual EP/BVA suite
 
 ```bash
-pytest tests/test_manual_pytest.py -v
+pytest -c mutmut_pytest.ini tests/manual -q
 ```
 
-### Approach B — Automated Property-Based Tests
+Expected result:
+
+```text
+29 passed
+```
+
+### Property-based suite
 
 ```bash
-pytest tests/test_automated_hypothesis.py -v
+pytest -c mutmut_pytest.ini tests/property_based -q
 ```
 
-### Both suites with coverage report
+Expected result:
 
-```bash
-# Coverage for Approach A
-pytest tests/test_manual_pytest.py \
-  --cov=src \
-  --cov-branch \
-  --cov-report=term-missing \
-  --cov-report=html:htmlcov/pytest
-
-# Coverage for Approach B
-pytest tests/test_automated_hypothesis.py \
-  --cov=src \
-  --cov-branch \
-  --cov-report=term-missing \
-  --cov-report=html:htmlcov/hypothesis
+```text
+16 passed
 ```
-
-Coverage HTML reports are saved to `htmlcov/pytest/` and `htmlcov/hypothesis/` respectively.
 
 ---
 
-## Running Mutation Analysis
+## Collecting Structural Coverage
 
-> ⚠️ Mutation testing is computationally intensive. Expect **15–40 minutes** per run depending on hardware.
+Coverage is measured only for the selected production modules.
+
+### Manual suite coverage
 
 ```bash
-# Against Approach A (manual PyTest suite) only
-bash mutation/run_mutation.sh pytest
-
-# Against Approach B (Hypothesis suite) only
-bash mutation/run_mutation.sh hypothesis
-
-# Against both suites sequentially
-bash mutation/run_mutation.sh both
+pytest -c mutmut_pytest.ini tests/manual \
+  --cov=accounts.models \
+  --cov=transactions.forms \
+  --cov=transactions.models \
+  --cov=transactions.views \
+  --cov-branch \
+  --cov-report=term-missing
 ```
 
-Results are saved to `mutation/results/`.
-
-### Inspecting individual mutants
+### Property-based suite coverage
 
 ```bash
-# Overall summary
+pytest -c mutmut_pytest.ini tests/property_based \
+  --cov=accounts.models \
+  --cov=transactions.forms \
+  --cov=transactions.models \
+  --cov=transactions.views \
+  --cov-branch \
+  --cov-report=term-missing
+```
+
+---
+
+## Generating HTML Coverage Reports
+
+### Manual suite
+
+```bash
+pytest -c mutmut_pytest.ini tests/manual \
+  --cov=accounts.models \
+  --cov=transactions.forms \
+  --cov=transactions.models \
+  --cov=transactions.views \
+  --cov-branch \
+  --cov-report=term-missing \
+  --cov-report=html:htmlcov/manual
+```
+
+Open:
+
+```text
+htmlcov/manual/index.html
+```
+
+### Property-based suite
+
+```bash
+pytest -c mutmut_pytest.ini tests/property_based \
+  --cov=accounts.models \
+  --cov=transactions.forms \
+  --cov=transactions.models \
+  --cov=transactions.views \
+  --cov-branch \
+  --cov-report=term-missing \
+  --cov-report=html:htmlcov/property
+```
+
+Open:
+
+```text
+htmlcov/property/index.html
+```
+
+---
+
+## Coverage Results
+
+| Production module        | Manual EP/BVA | Property-Based |
+| ------------------------ | ------------: | -------------: |
+| `accounts/models.py`     |           96% |            79% |
+| `transactions/forms.py`  |           75% |            75% |
+| `transactions/models.py` |          100% |            92% |
+| `transactions/views.py`  |           79% |            75% |
+| **Overall**              |       **84%** |        **77%** |
+
+The manual suite achieved seven percentage points more overall structural coverage.
+
+The largest difference occurred in the account and interest calculation module.
+
+Coverage reports are preserved under:
+
+```text
+results/coverage/
+```
+
+---
+
+## Mutation Testing
+
+Mutation testing was performed using `mutmut`.
+
+A mutation is a small automatic change made to the production code.
+
+For example:
+
+```python
+if amount > balance:
+```
+
+may be changed to:
+
+```python
+if amount >= balance:
+```
+
+Each changed program version is called a mutant.
+
+Mutation outcomes are classified as:
+
+- **Killed** — at least one test detected the change and failed.
+- **Survived** — the tests ran, but all tests still passed.
+- **No tests** — the mutated code was not executed by the selected suite.
+- **Timeout** — the test execution took longer than the allowed time.
+
+---
+
+## Preparing the Mutation Workspace
+
+The project includes a preparation script:
+
+```bash
+bash scripts/prepare_mutation_workspace.sh
+```
+
+Before a new complete mutation run, remove the existing generated workspace:
+
+```bash
+rm -rf mutants
+```
+
+---
+
+## Running the Manual Mutation Experiment
+
+Restore the manual mutation configuration:
+
+```bash
+cp results/mutation/manual/setup.cfg setup.cfg
+```
+
+Remove the existing mutation workspace:
+
+```bash
+rm -rf mutants
+```
+
+Run mutation testing:
+
+```bash
+mutmut run
+```
+
+Display the results:
+
+```bash
 mutmut results
+```
 
-# Show survived mutants only
-mutmut results --suspicious
-mutmut results --survived
+Observed result:
 
-# See the diff for a specific mutant
-mutmut show <mutant_id>
-
-# Apply a mutant to the source temporarily
-mutmut apply <mutant_id>
-# (restore with git checkout src/)
+```text
+Generated: 96
+Killed: 53
+Survived: 17
+No tests: 26
+Timeout: 0
 ```
 
 ---
 
-## Generating Analysis Charts
+## Running the Property-Based Mutation Experiment
+
+Restore the property-based mutation configuration:
 
 ```bash
-python analysis/compare_scores.py
+cp results/mutation/property_based/setup.cfg setup.cfg
 ```
 
-Figures are saved to `analysis/figures/`:
-- `mutation_score_comparison.png` — side-by-side mutation scores for both suites
-- `coverage_vs_mutation.png` — scatter plot of coverage vs mutation score
-- `survived_mutant_categories.png` — breakdown of survived mutant types per suite
+Remove the previous mutation workspace:
+
+```bash
+rm -rf mutants
+```
+
+Run mutation testing:
+
+```bash
+mutmut run
+```
+
+Display the results:
+
+```bash
+mutmut results
+```
+
+Observed result:
+
+```text
+Generated: 96
+Killed: 42
+Survived: 15
+No tests: 39
+Timeout: 0
+```
 
 ---
 
-## Branching Strategy
+## Inspecting Mutants
 
-```
-main
-│
-├── develop
-│   ├── feature/subject-system         ← src/transaction.py
-│   ├── feature/pytest-suite           ← Approach A test suite
-│   ├── feature/hypothesis-suite       ← Approach B test suite
-│   ├── feature/mutation-analysis      ← mutmut results and analysis scripts
-│   └── feature/report-slides          ← final report and presentation
+List mutation results:
+
+```bash
+mutmut results
 ```
 
-Each feature branch is opened as a pull request into `develop`. Final merge to `main` at submission.
+Inspect a specific mutant:
+
+```bash
+mutmut show <mutant-id>
+```
+
+Example:
+
+```bash
+mutmut show transactions.forms.xǁTransactionFormǁ__init____mutmut_5
+```
+
+Exported survivor details are stored under:
+
+```text
+results/mutation/survivor_details/
+```
+
+The complete classification is documented in:
+
+```text
+docs/surviving_mutant_analysis.md
+```
 
 ---
 
-## Key References
+## Mutation Results
 
-1. K. Claessen and J. Hughes, "QuickCheck: A lightweight tool for random testing of Haskell programs," *ACM ICFP*, 2000.
-2. M. Papadakis et al., "Mutation testing advances: An analysis and survey," *Advances in Computers*, vol. 112, 2019.
-3. L. Inozemtseva and R. Holmes, "Coverage is not strongly correlated with test suite effectiveness," *ICSE*, 2014.
-4. K. Jain et al., "Mind the gap: The difference between coverage and mutation score can guide testing efforts," *ICSTW*, 2023.
-5. G. Petrović and M. Ivanković, "Practical mutation testing at scale: A view from Google," *IEEE TSE*, 2022.
-6. S. Ravi and M. Coblenz, "An empirical evaluation of property-based testing in Python," *ACM OOPSLA2*, 2025.
+| Test suite     | Generated | Killed | Survived | No tests | Timeout |
+| -------------- | --------: | -----: | -------: | -------: | ------: |
+| Manual EP/BVA  |        96 |     53 |       17 |       26 |       0 |
+| Property-Based |        96 |     42 |       15 |       39 |       0 |
+
+---
+
+## Controlled Relevant Mutant Population
+
+Twenty-six mutants belonged to:
+
+```text
+TransactionDateRangeForm.clean_daterange
+```
+
+Transaction date-range filtering was declared outside the selected verification scope.
+
+The same 26 mutants were classified as `no tests` in both runs and were excluded symmetrically from the controlled comparison.
+
+```text
+Relevant mutant population = 96 - 26 = 70
+```
+
+---
+
+## Controlled Mutation Scores
+
+The controlled mutation score is calculated as:
+
+```text
+Controlled mutation score =
+Killed relevant mutants / Relevant mutant population × 100
+```
+
+### Manual EP/BVA suite
+
+```text
+53 / 70 × 100 = 75.71%
+```
+
+### Property-based suite
+
+```text
+42 / 70 × 100 = 60.00%
+```
+
+Difference:
+
+```text
+15.71 percentage points
+```
+
+---
+
+## Reached-Mutant Scores
+
+The reached-mutant score includes only killed and surviving mutants:
+
+```text
+Reached-mutant score =
+Killed / (Killed + Survived) × 100
+```
+
+### Manual EP/BVA suite
+
+```text
+53 / (53 + 17) × 100 = 75.71%
+```
+
+### Property-based suite
+
+```text
+42 / (42 + 15) × 100 = 73.68%
+```
+
+Difference:
+
+```text
+2.03 percentage points
+```
+
+The much smaller reached-mutant difference shows that the main controlled-score difference was caused by behavioural reach.
+
+---
+
+## Survivor Analysis
+
+The 17 manual-suite survivors were classified as:
+
+| Category                                 |  Count |
+| ---------------------------------------- | -----: |
+| Genuine test weaknesses                  |      7 |
+| Underspecified diagnostic-text behaviour |      7 |
+| Equivalent or likely equivalent mutants  |      2 |
+| Outside the core scope                   |      1 |
+| **Total**                                | **17** |
+
+The genuine test weaknesses involved:
+
+- interest arithmetic;
+- monetary rounding;
+- interest-calculation scheduling; and
+- positional form initialization.
+
+Some surviving mutants changed only error-message wording without changing the financial decision.
+
+Two mutants appeared equivalent or likely equivalent because the code changed without a clear observable behavioural difference.
+
+---
+
+## Key Results
+
+### Test execution
+
+| Suite          |    Result |
+| -------------- | --------: |
+| Manual EP/BVA  | 29 passed |
+| Property-Based | 16 passed |
+
+### Coverage
+
+| Suite          | Overall coverage |
+| -------------- | ---------------: |
+| Manual EP/BVA  |              84% |
+| Property-Based |              77% |
+
+### Controlled mutation score
+
+| Suite          |  Score |
+| -------------- | -----: |
+| Manual EP/BVA  | 75.71% |
+| Property-Based | 60.00% |
+
+### Reached-mutant score
+
+| Suite          |  Score |
+| -------------- | -----: |
+| Manual EP/BVA  | 75.71% |
+| Property-Based | 73.68% |
+
+---
+
+## Main Conclusions
+
+The main conclusions are:
+
+1. The manual EP/BVA suite achieved broader behavioural reach.
+2. The manual suite achieved higher overall structural coverage.
+3. The manual suite reached all 70 relevant mutants.
+4. The property-based suite left 13 relevant mutants unexecuted.
+5. The controlled mutation scores differed by 15.71 percentage points.
+6. The reached-mutant scores differed by only 2.03 percentage points.
+7. The major difference was behavioural reach, not a large difference in fault-detection strength within reached code.
+8. Coverage alone did not fully explain test effectiveness.
+9. Mutation testing revealed weaknesses that coverage percentages did not clearly show.
+10. EP/BVA and property-based testing should be used together rather than treated as direct replacements.
+
+This study does not claim that manually designed testing is universally better than property-based testing.
+
+For this case study, the manual suite represented a broader set of selected behaviours, while both suites showed similar effectiveness within the code they reached.
+
+---
+
+## Reproducibility Artifacts
+
+The repository preserves the following result files:
+
+```text
+results/coverage/manual_coverage.txt
+results/coverage/manual_coverage.json
+results/coverage/property_coverage.txt
+results/coverage/property_coverage.json
+```
+
+```text
+results/mutation/manual/
+results/mutation/property_based/
+results/mutation/comparison_summary.txt
+results/mutation/survivor_details/
+```
+
+These files contain the outputs used in the final analysis and report.
+
+---
+
+## Report and Presentation
+
+The complete report is stored under:
+
+```text
+report/
+```
+
+The presentation materials are stored under:
+
+```text
+presentation/
+```
+
+The report includes:
+
+- background and related work;
+- selected subject-system scope;
+- reconstructed requirements;
+- financial invariants;
+- manual test design;
+- property-based test design;
+- coverage analysis;
+- mutation analysis;
+- survivor classification;
+- threats to validity;
+- reproduction instructions;
+- recommendations; and
+- execution evidence.
+
+---
+
+## Academic References
+
+1. J. Hughes, "Software Testing with QuickCheck," in _Central European Functional Programming School: Third Summer School, CEFP 2009, Revised Selected Lectures_, LNCS 6299. Springer, 2010, pp. 183–223.
+
+2. Y. Jia and M. Harman, "An Analysis and Survey of the Development of Mutation Testing," _IEEE Transactions on Software Engineering_, vol. 37, no. 5, pp. 649–678, 2011.
+
+3. M. Papadakis, S. Yoo, D. Shin, and D.-H. Bae, "Are Mutation Scores Correlated with Real Fault Detection? A Large-Scale Empirical Study on the Relationship Between Mutants and Real Faults," in _Proceedings of the 40th International Conference on Software Engineering_, 2018, pp. 537–548.
+
+4. S. Ravi and M. Coblenz, "An Empirical Evaluation of Property-Based Testing in Python," _Proceedings of the ACM on Programming Languages_, vol. 9, no. OOPSLA2, pp. 3897–3923, 2025.
+
+5. saadmk11, "Banking System," GitHub repository. Evaluated revision `9c3ee3eea75030280405506c62d968d646981c05`.
+
+---
+
+## Attribution
+
+The subject application used in this study was created by `saadmk11`.
+
+Original repository:
+
+```text
+https://github.com/saadmk11/banking-system
+```
+
+The subject source was used as an open-source case study for software verification and testing.
 
 ---
 
 ## License
 
-This repository is submitted as academic coursework for ENGI 9839 at Memorial University of Newfoundland. Not licensed for reuse.
+This repository was prepared as academic coursework for ENGI-9839, Software Verification and Validation, at Memorial University of Newfoundland.
+
+The imported subject system remains subject to its original upstream licence.
+
+See:
+
+```text
+LICENSE
+subject_system/banking_system/LICENSE
+```
+
+for applicable licensing information.
