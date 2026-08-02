@@ -220,3 +220,14 @@ __marimo__/
 # Mutation-testing generated workspaces
 src/
 mutants/
+
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+mutants/
+mutmut/
+.DS_Store
